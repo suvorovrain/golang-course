@@ -1,0 +1,6 @@
+version: "2"
+linters:
+  enable: [staticcheck]
+  settings:
+    staticcheck:
+      checks: ["all", "-ST1000"]
