@@ -60,3 +60,13 @@
 
 - Крутая книга для изучения GoLang: Jon Bodner --- Learning Go
 - Необходимая документация API GitHub для выполнения задания: https://docs.github.com/en/rest/repos
+
+## Итог
+
+- ![alt text](image.png)
+- вывод программы при положительном исходе и при неудачном запросе(с выключенным интернетом)
+- для запуска из корня:
+```
+- go run cmd/github_info/main.go --owner polka777 --repo golang-course
+```
+- где нужно задать флаги owner и repo своими значениями
