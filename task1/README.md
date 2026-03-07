@@ -1,62 +1,36 @@
-# Домашнее задание №1  
-## CLI-инструмент для получения информации о репозитории GitHub
+# CLI tool for getting information about the GitHub repository
+
+A simple command-line tool written in **Go** that fetches and displays key information about a public GitHub repository using the official GitHub API.
 
 ---
 
-## Задача
+## Features
 
-Необходимо реализовать простой CLI-инструмент на Go, который получает информацию о репозитории GitHub и выводит её в консоль.
+- Fetches repository metadata by owner and name.
+- Displays:
+    - Repository Name
+    - Description
+    - Star Count
+    - Fork Count
+    - Creation Date
 
-Инструмент должен:
+## Prerequisites
 
-- принимать параметры репозитория (способ передачи --- на ваше усмотрение),
-- отправлять HTTP-запрос к GitHub,
-- получать JSON-ответ,
-- выводить ключевую информацию в читаемом виде.
+- [Go](https://go.dev/dl/) (version 1.20 or later recommended) installed on your machine.
 
-Репозиторий должен быть обязательно оформлен (хотя бы минимальный README с инструкцией к запуску).
+## Installation & Usage
 
----
+You don't need to install the binary globally. You can run the tool directly from the source code.
 
-## Минимальная информация, которую необходимо вывести
+### 1. Clone the repository
 
-1. Имя репозитория  
-2. Описание  
-3. Количество звёзд  
-4. Количество форков  
-5. Дата создания  
+```bash
+git clone <your-repository-url>
+cd <your-repository-directory>
+```
 
----
+### 2. Run the tool
 
-## Требования
-
-- Использовать только стандартную библиотеку Go.
-- Для сетевых запросов использовать `net/http`.
-- Выводить информацию в читаемом виде.
-- Обработать возможные ошибки:
-  - отсутствие репозитория,
-  - сетевые ошибки,
-  - некорректный ввод.
----
-
-## Формат сдачи задания
-
-Необходимо добавить ревьюеров в collaborators репозитория: `Settings -> Collaborators -> Add people`
-Ревьюеры:
-- https://github.com/suvorovrain
-- https://github.com/Dabzelos
-- https://github.com/vacmannnn
-
-Работу над заданием необходимо вести в отдельной ветке.
-
-В конце работы необходимо открыть PR из вашей ветки в main вашего форка и отметить ревьюеров в разделе `Reviewers`.
-
-В PR с выполненным заданием необходимо приложить скриншот работы приложения :).
-
-Рекоммендуется писать адекватное описание коммитов и PR.
-
-
-## Полезные материалы
-
-- Крутая книга для изучения GoLang: Jon Bodner --- Learning Go
-- Необходимая документация API GitHub для выполнения задания: https://docs.github.com/en/rest/repos
+```bash
+go run main.go -owner <OWNER> -repo <REPO_NAME>
+```
