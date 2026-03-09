@@ -1,0 +1,35 @@
+name: Build
+on: [push, pull_request]
+
+jobs:
+  build-Ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
+      - name: Build
+        run: |
+          for solution in $(find . -name "*.sln"); do
+            dotnet build "$solution"
+          done
+      - name: Run tests
+        run: |
+          for solution in $(find . -name "*.sln"); do
+            dotnet test "$solution"
+          done
+
+  build-Windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
+      - name: Build
+        shell: cmd
+        run: For /R %%I in (*.sln) do dotnet build %%I
+      - name: Run tests
+        shell: cmd
+        run: For /R %%I in (*.sln) do dotnet test %%I
