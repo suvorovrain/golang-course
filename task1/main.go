@@ -16,19 +16,19 @@ func main() {
 	flag.Parse()
 
 	if *nameUser == "" || *nameRepo == "" {
-		fmt.Println("Ошибка: ты дурак")
+		fmt.Println("Error: both -name and -repo flags are required")
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
 
-	fmt.Printf("Запрос данных для: %s/%s\n", *nameUser, *nameRepo)
+	fmt.Printf("Fetching data for: %s/%s\n", *nameUser, *nameRepo)
 	infoRepo, err := getRepoInfo(*nameUser, *nameRepo)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
-	fmt.Printf("Information for repository:\n FullName: %s\n Stars: %d\n Description: %s\n Forks: %d\n Date created: %s\n",
+	fmt.Printf("Repository: %s\n Stars: %d\n Description: %s\n Forks: %d\n Date created: %s\n",
 		infoRepo.FullName, infoRepo.Stars, infoRepo.Description, infoRepo.Forks, infoRepo.CreatedAt)
 }
 
@@ -45,7 +45,7 @@ func getRepoInfo(nameUser, nameRepo string) (*Repository, error) {
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return nil, fmt.Errorf("ошибка создания запроса: %w", err)
+		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
 
 	req.Header.Set("User-Agent", "MyGoApp/1.0")
@@ -53,24 +53,24 @@ func getRepoInfo(nameUser, nameRepo string) (*Repository, error) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("ошибка HTTP-запроса: %w", err)
+		return nil, fmt.Errorf("HTTP request failed: %w", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
-		return nil, fmt.Errorf("ошибка API: статус %d, ответ: %s", resp.StatusCode, string(body))
+		return nil, fmt.Errorf("API error: status %d, response: %s", resp.StatusCode, string(body))
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("ошибка чтения ответа: %w", err)
+		return nil, fmt.Errorf("failed to read response body: %w", err)
 	}
 
 	var repo Repository
 	err = json.Unmarshal(body, &repo)
 	if err != nil {
-		return nil, fmt.Errorf("ошибка парсинга JSON: %w", err)
+		return nil, fmt.Errorf("failed to parse JSON: %w", err)
 	}
 
 	return &repo, nil
