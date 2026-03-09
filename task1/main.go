@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -25,7 +24,7 @@ func main() {
 	fmt.Println("Enter the owner's name: ")
 	inputName, err := reader.ReadString('\n')
 	if err != nil {
-		fmt.Println("Reading error:", err)
+		fmt.Println("Reading error: ", err)
 		return
 	}
 
@@ -40,13 +39,13 @@ func main() {
 
 	repo := strings.TrimSpace(inputRepo)
 	url := fmt.Sprintf("https://api.github.com/repos/%s/%s", name, repo)
-	checkCLI((url))
+	fetchAndPrintRepo((url))
 }
 
-func checkCLI(link string) {
+func fetchAndPrintRepo(link string) error {
 	request, err := http.NewRequest("GET", link, nil)
 	if err != nil {
-		log.Fatalf("Request creation error: %s", err)
+		return fmt.Errorf("Request creation error: %s", err)
 	}
 
 	request.Header.Set("User-Agent", "golang-course")
@@ -54,19 +53,19 @@ func checkCLI(link string) {
 	client := &http.Client{}
 	response, err := client.Do(request)
 	if err != nil {
-		log.Fatalf("Request execution error: %s", err)
+		return fmt.Errorf("Request execution error: %s", err)
 	}
 
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(response.Body)
-		log.Fatalf("API returns the error %d: %s", response.StatusCode, string(body))
+		return fmt.Errorf("API returns the error %d: %s", response.StatusCode, string(body))
 	}
 
 	var repo Repository
 	if err := json.NewDecoder(response.Body).Decode(&repo); err != nil {
-		log.Fatalf("JSON parsing error: %s", err)
+		return fmt.Errorf("JSON parsing error: %s", err)
 	}
 
 	fmt.Printf("Repository: %s\n", repo.Name)
@@ -79,4 +78,6 @@ func checkCLI(link string) {
 	} else {
 		fmt.Printf("Created At: %s\n", repo.CreationDate)
 	}
+
+	return nil
 }
