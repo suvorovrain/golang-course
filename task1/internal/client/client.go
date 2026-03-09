@@ -94,10 +94,6 @@ func extractRepoPath(input string) (string, error) {
 func extractFromURL(url string) (string, error) {
 	url = strings.TrimSuffix(url, ".git")
 
-	if !strings.Contains(url, "github.com/") {
-		return "", fmt.Errorf("not a GitHub repository URL")
-	}
-
 	parts := strings.Split(url, "github.com/")
 	if len(parts) != 2 {
 		return "", fmt.Errorf("invalid GitHub URL format")
