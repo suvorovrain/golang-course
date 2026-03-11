@@ -3,6 +3,7 @@ package client
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -33,12 +34,14 @@ func (r *Repository) String() string {
 type GitHubClient struct {
 	httpClient *http.Client
 	baseURL    string
+	logger     *log.Logger
 }
 
 func NewClient() *GitHubClient {
 	return &GitHubClient{
 		httpClient: &http.Client{Timeout: 10 * time.Second},
 		baseURL:    "https://api.github.com/repos",
+		logger:     log.Default(),
 	}
 }
 
@@ -62,7 +65,12 @@ func (ghc GitHubClient) GetRepositoryInfo(url string) (*Repository, error) {
 	if err != nil {
 		return nil, fmt.Errorf("request execution error: %w", err)
 	}
-	defer resp.Body.Close()
+
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			ghc.logger.Printf("Warning: failed to close response body: %v\n", err)
+		}
+	}()
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("bad status: %s", resp.Status)
