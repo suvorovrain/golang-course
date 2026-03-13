@@ -12,7 +12,7 @@
 
 ## для использования клонируйте репозиторий и забилдите
 ```shell
-$ git clone https://github.com/Redkin-Aleksey/golang-course && go build Redkin-Aleksey/goland-course/main.go -o repoinfo
+$ git clone https://github.com/Redkin-Aleksey/golang-course && cd build goland-course/task1 && go build
 ```
 
 ## пример использования
