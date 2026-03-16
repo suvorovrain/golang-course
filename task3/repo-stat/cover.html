@@ -1,0 +1,638 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>app: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">repo-stat/api/cmd/app/main.go (0.0%)</option>
+				
+				<option value="file1">repo-stat/api/config/config.go (0.0%)</option>
+				
+				<option value="file2">repo-stat/api/internal/adapter/subscriber/subscriber.go (0.0%)</option>
+				
+				<option value="file3">repo-stat/api/internal/controller/http/handler.go (0.0%)</option>
+				
+				<option value="file4">repo-stat/api/internal/controller/http/ping.go (0.0%)</option>
+				
+				<option value="file5">repo-stat/api/internal/controller/http/routes.go (0.0%)</option>
+				
+				<option value="file6">repo-stat/api/internal/usecase/ping.go (0.0%)</option>
+				
+				<option value="file7">repo-stat/platform/env/loader.go (0.0%)</option>
+				
+				<option value="file8">repo-stat/platform/grpcserver/grpcserver.go (0.0%)</option>
+				
+				<option value="file9">repo-stat/platform/httpserver/httpserver.go (0.0%)</option>
+				
+				<option value="file10">repo-stat/platform/logger/logger.go (0.0%)</option>
+				
+				<option value="file11">repo-stat/subscriber/cmd/app/main.go (0.0%)</option>
+				
+				<option value="file12">repo-stat/subscriber/config/config.go (0.0%)</option>
+				
+				<option value="file13">repo-stat/subscriber/internal/controller/grpc/ping.go (0.0%)</option>
+				
+				<option value="file14">repo-stat/subscriber/internal/usecase/ping.go (0.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package main
+
+import (
+        "context"
+        "flag"
+        "fmt"
+        "os"
+        "os/signal"
+        "repo-stat/api/config"
+        "repo-stat/api/internal/controller/http"
+        "repo-stat/platform/httpserver"
+        "repo-stat/platform/logger"
+)
+
+func run(ctx context.Context) error <span class="cov0" title="0">{
+        // config
+        var configPath string
+        flag.StringVar(&amp;configPath, "config", "config.yaml", "server configuration file")
+        flag.Parse()
+
+        cfg := config.MustLoad(configPath)
+
+        // logger
+
+        log := logger.MustMakeLogger(cfg.Logger.LogLevel)
+
+        log.Info("starting server...")
+        log.Debug("debug messages are enabled")
+
+        // handler
+        handler, err := http.NewHandler(ctx, log, cfg)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error("Error creating handler", "error", err)
+                return err
+        }</span>
+
+        // server
+        <span class="cov0" title="0">srv := httpserver.New(cfg.HTTP, handler)
+        if err := srv.Run(ctx); err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("run http server: %w", err)
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+func main() <span class="cov0" title="0">{
+        ctx := context.Background()
+        ctx, cancel := signal.NotifyContext(ctx, os.Interrupt)
+        if err := run(ctx); err != nil </span><span class="cov0" title="0">{
+                _, err = fmt.Fprintln(os.Stderr, err)
+                if err != nil </span><span class="cov0" title="0">{
+                        fmt.Printf("launching server error: %s\n", err)
+                }</span>
+                <span class="cov0" title="0">cancel()
+                os.Exit(1)</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package config
+
+import (
+        "repo-stat/platform/env"
+        "repo-stat/platform/httpserver"
+        "repo-stat/platform/logger"
+)
+
+type App struct {
+        AppName string `yaml:"app_name" env:"APP_NAME" env-default:"repo-stat-api"`
+}
+
+type Services struct {
+        Subscriber string `yaml:"subscriber" env:"SUBSCRIBER_ADDRESS" env-default:"localhost:8081"`
+}
+
+type Config struct {
+        App      App               `yaml:"app"`
+        Services Services          `yaml:"services"`
+        HTTP     httpserver.Config `yaml:"http"`
+        Logger   logger.Config     `yaml:"logger"`
+}
+
+func MustLoad(path string) Config <span class="cov0" title="0">{
+        var cfg Config
+        env.MustLoad(path, &amp;cfg)
+        return cfg
+}</pre>
+		
+		<pre class="file" id="file2" style="display: none">package subscriber
+
+import (
+        "context"
+        "log/slog"
+        "repo-stat/api/internal/domain"
+
+        subscirberpb "repo-stat/proto/subscriber"
+
+        "google.golang.org/grpc"
+        "google.golang.org/grpc/credentials/insecure"
+)
+
+type Client struct {
+        log  *slog.Logger
+        conn *grpc.ClientConn
+        pb   subscirberpb.SubscriberClient
+}
+
+func NewClient(address string, log *slog.Logger) (*Client, error) <span class="cov0" title="0">{
+        conn, err := grpc.NewClient(
+                address,
+                grpc.WithTransportCredentials(insecure.NewCredentials()),
+        )
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;Client{
+                log:  log,
+                conn: conn,
+                pb:   subscirberpb.NewSubscriberClient(conn),
+        }, nil</span>
+}
+
+func (c *Client) Ping(ctx context.Context) domain.PingStatus <span class="cov0" title="0">{
+        _, err := c.pb.Ping(ctx, &amp;subscirberpb.PingRequest{})
+        if err != nil </span><span class="cov0" title="0">{
+                c.log.Error("subscriber ping failed", "error", err)
+                return domain.PingStatusDown
+        }</span>
+
+        <span class="cov0" title="0">return domain.PingStatusUp</span>
+}
+
+func (c *Client) Close() error <span class="cov0" title="0">{
+        return c.conn.Close()
+}</pre>
+		
+		<pre class="file" id="file3" style="display: none">package http
+
+import (
+        "context"
+        "log/slog"
+        "net/http"
+        "repo-stat/api/config"
+        "repo-stat/api/internal/adapter/subscriber"
+        "repo-stat/api/internal/usecase"
+)
+
+func NewHandler(ctx context.Context, log *slog.Logger, cfg config.Config) (http.Handler, error) <span class="cov0" title="0">{
+        subscriberClient, err := subscriber.NewClient(cfg.Services.Subscriber, log)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error("cannot init subscriber adapter", "error", err)
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">pingUseCase := usecase.NewPing(subscriberClient)
+
+        mux := http.NewServeMux()
+        AddRoutes(mux, log, pingUseCase)
+
+        var handler http.Handler = mux
+        return handler, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package http
+
+import (
+        "encoding/json"
+        "log/slog"
+        "net/http"
+        "repo-stat/api/internal/dto"
+        "repo-stat/api/internal/usecase"
+)
+
+func NewPingHandler(log *slog.Logger, ping *usecase.Ping) http.HandlerFunc <span class="cov0" title="0">{
+        return func(w http.ResponseWriter, r *http.Request) </span><span class="cov0" title="0">{
+                status := ping.Execute(r.Context())
+
+                response := dto.PingResponse{
+                        Reply: string(status),
+                }
+
+                w.Header().Set("Content-Type", "application/json")
+                w.WriteHeader(http.StatusOK)
+
+                if err := json.NewEncoder(w).Encode(response); err != nil </span><span class="cov0" title="0">{
+                        log.Error("failed to write ping response", "error", err)
+                }</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package http
+
+import (
+        "log/slog"
+        "net/http"
+        "repo-stat/api/internal/usecase"
+)
+
+func AddRoutes(mux *http.ServeMux, log *slog.Logger, ping *usecase.Ping) <span class="cov0" title="0">{
+        mux.Handle("GET /api/ping", NewPingHandler(log, ping))
+}</span>
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package usecase
+
+import (
+        "context"
+        "repo-stat/api/internal/domain"
+)
+
+type Pinger interface {
+        Ping(ctx context.Context) domain.PingStatus
+}
+
+type Ping struct {
+        pinger Pinger
+}
+
+func NewPing(pinger Pinger) *Ping <span class="cov0" title="0">{
+        return &amp;Ping{
+                pinger: pinger,
+        }
+}</span>
+
+func (u *Ping) Execute(ctx context.Context) domain.PingStatus <span class="cov0" title="0">{
+        return u.pinger.Ping(ctx)
+}</pre>
+		
+		<pre class="file" id="file7" style="display: none">package env
+
+import (
+        "log"
+
+        "github.com/ilyakaznacheev/cleanenv"
+)
+
+func MustLoad(path string, cfg interface{}) <span class="cov0" title="0">{
+        if err := cleanenv.ReadConfig(path, cfg); err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("cannot read config: %v", err)
+        }</span>
+
+        <span class="cov0" title="0">if err := cleanenv.ReadEnv(cfg); err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("cannot read env: %v", err)
+        }</span>
+}</pre>
+		
+		<pre class="file" id="file8" style="display: none">package grpcserver
+
+import (
+        "context"
+        "net"
+        "time"
+
+        "google.golang.org/grpc"
+)
+
+type Config struct {
+        Address string        `yaml:"address" env:"LISTEN_ADDRESS" env-default:"localhost:8081"`
+        Timeout time.Duration `yaml:"timeout" env:"TIMEOUT" env-default:"5s"`
+}
+
+type Server struct {
+        srv *grpc.Server
+        lis net.Listener
+}
+
+func New(address string, opts ...grpc.ServerOption) (*Server, error) <span class="cov0" title="0">{
+        lis, err := net.Listen("tcp", address)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;Server{
+                srv: grpc.NewServer(opts...),
+                lis: lis,
+        }, nil</span>
+}
+
+func (s *Server) Run(ctx context.Context) error <span class="cov0" title="0">{
+        go func() </span><span class="cov0" title="0">{
+                &lt;-ctx.Done()
+                s.srv.GracefulStop()
+        }</span>()
+        <span class="cov0" title="0">return s.srv.Serve(s.lis)</span>
+}
+
+func (s *Server) GRPC() *grpc.Server <span class="cov0" title="0">{
+        return s.srv
+}</pre>
+		
+		<pre class="file" id="file9" style="display: none">package httpserver
+
+import (
+        "context"
+        "errors"
+        "net/http"
+        "time"
+)
+
+type Config struct {
+        Address string        `yaml:"address" env:"LISTEN_ADDRESS" env-default:"localhost:8080"`
+        Timeout time.Duration `yaml:"timeout" env:"TIMEOUT" env-default:"5s"`
+}
+
+type Server struct {
+        srv *http.Server
+}
+
+func New(cfg Config, handler http.Handler) *Server <span class="cov0" title="0">{
+        return &amp;Server{
+                srv: &amp;http.Server{
+                        Addr:         cfg.Address,
+                        ReadTimeout:  cfg.Timeout,
+                        WriteTimeout: cfg.Timeout,
+                        IdleTimeout:  30 * time.Second,
+                        Handler:      handler,
+                },
+        }
+}</span>
+
+func (s *Server) Run(ctx context.Context) error <span class="cov0" title="0">{
+        go func() </span><span class="cov0" title="0">{
+                &lt;-ctx.Done()
+
+                ctxShutdown, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+                defer cancel()
+
+                _ = s.srv.Shutdown(ctxShutdown)
+        }</span>()
+
+        <span class="cov0" title="0">err := s.srv.ListenAndServe()
+        if errors.Is(err, http.ErrServerClosed) </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+        <span class="cov0" title="0">return err</span>
+}</pre>
+		
+		<pre class="file" id="file10" style="display: none">package logger
+
+import (
+        "log/slog"
+        "os"
+)
+
+type Config struct {
+        LogLevel string `yaml:"log_level" default:"DEBUG"`
+}
+
+func MustMakeLogger(logLevel string) *slog.Logger <span class="cov0" title="0">{
+        var level slog.Level
+        switch logLevel </span>{
+        case "DEBUG":<span class="cov0" title="0">
+                level = slog.LevelDebug</span>
+        case "INFO":<span class="cov0" title="0">
+                level = slog.LevelInfo</span>
+        case "ERROR":<span class="cov0" title="0">
+                level = slog.LevelError</span>
+        default:<span class="cov0" title="0">
+                panic("unknown log level: " + logLevel)</span>
+        }
+        <span class="cov0" title="0">handler := slog.NewTextHandler(os.Stderr, &amp;slog.HandlerOptions{Level: level})
+        return slog.New(handler)</span>
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package main
+
+import (
+        "context"
+        "flag"
+        "fmt"
+        "os"
+        "os/signal"
+        "repo-stat/platform/grpcserver"
+        "repo-stat/platform/logger"
+        subscriberpb "repo-stat/proto/subscriber"
+        "repo-stat/subscriber/config"
+        grpccontroller "repo-stat/subscriber/internal/controller/grpc"
+        "repo-stat/subscriber/internal/usecase"
+)
+
+func run(ctx context.Context) error <span class="cov0" title="0">{
+        var configPath string
+        flag.StringVar(&amp;configPath, "config", "config.yaml", "server configuration file")
+        flag.Parse()
+
+        cfg := config.MustLoad(configPath)
+
+        log := logger.MustMakeLogger(cfg.Logger.LogLevel)
+        log.Info("starting subscriber server...")
+        log.Debug("debug messages are enabled")
+
+        pingUseCase := usecase.NewPing()
+        pingServer := grpccontroller.NewServer(log, pingUseCase)
+
+        srv, err := grpcserver.New(cfg.GRPC.Address)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("create grpc server: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">subscriberpb.RegisterSubscriberServer(srv.GRPC(), pingServer)
+
+        if err := srv.Run(ctx); err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("run grpc server: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+
+func main() <span class="cov0" title="0">{
+        ctx := context.Background()
+        ctx, cancel := signal.NotifyContext(ctx, os.Interrupt)
+        if err := run(ctx); err != nil </span><span class="cov0" title="0">{
+                _, err = fmt.Fprintln(os.Stderr, err)
+                if err != nil </span><span class="cov0" title="0">{
+                        fmt.Printf("launching server error: %s\n", err)
+                }</span>
+                <span class="cov0" title="0">cancel()
+                os.Exit(1)</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package config
+
+import (
+        "repo-stat/platform/env"
+        "repo-stat/platform/grpcserver"
+        "repo-stat/platform/logger"
+)
+
+type App struct {
+        AppName string `yaml:"app_name" env:"APP_NAME" env-default:"repo-stat-subscriber"`
+}
+
+type Services struct {
+        API string `yaml:"api" env:"API_ADDRESS" env-default:"localhost:8080"`
+}
+
+type Config struct {
+        App      App               `yaml:"app"`
+        Services Services          `yaml:"services"`
+        GRPC     grpcserver.Config `yaml:"grpc"`
+        Logger   logger.Config     `yaml:"logger"`
+}
+
+func MustLoad(path string) Config <span class="cov0" title="0">{
+        var cfg Config
+        env.MustLoad(path, &amp;cfg)
+        return cfg
+}</pre>
+		
+		<pre class="file" id="file13" style="display: none">package grpc
+
+import (
+        "context"
+        "log/slog"
+        subscriberpb "repo-stat/proto/subscriber"
+        "repo-stat/subscriber/internal/usecase"
+)
+
+type Server struct {
+        subscriberpb.UnimplementedSubscriberServer
+        log  *slog.Logger
+        ping *usecase.Ping
+}
+
+func NewServer(log *slog.Logger, ping *usecase.Ping) *Server <span class="cov0" title="0">{
+        return &amp;Server{
+                log:  log,
+                ping: ping,
+        }
+}</span>
+
+func (s *Server) Ping(ctx context.Context, _ *subscriberpb.PingRequest) (*subscriberpb.PingResponse, error) <span class="cov0" title="0">{
+        s.log.Debug("subscriberp ping request received")
+
+        return &amp;subscriberpb.PingResponse{
+                Reply: s.ping.Execute(ctx),
+        }, nil
+}</span>
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package usecase
+
+import "context"
+
+type Ping struct{}
+
+func NewPing() *Ping <span class="cov0" title="0">{
+        return &amp;Ping{}
+}</span>
+
+func (u *Ping) Execute(context.Context) string <span class="cov0" title="0">{
+        return "pong"
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>
