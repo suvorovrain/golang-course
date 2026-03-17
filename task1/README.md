@@ -60,3 +60,19 @@
 
 - Крутая книга для изучения GoLang: Jon Bodner --- Learning Go
 - Необходимая документация API GitHub для выполнения задания: https://docs.github.com/en/rest/repos
+
+## Инструкция по запуску
+1.  **Клонируйте репозиторий:**
+    ```bash
+    git clone https://github.com/Chaice1/golang-course
+    ```
+
+2.  **Перейдите в директорию проекта:**
+    ```bash
+    cd golang-course
+    ```
+
+3.  **Запустите приложение:**
+    ```bash
+    go run main.go
+    ```
