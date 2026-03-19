@@ -2,12 +2,13 @@ package httpserver
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"time"
 )
 
 type Config struct {
-	Address string `yaml:"address" default:"8080"`
+	Address string        `yaml:"address" default:"localhost:8080"`
 	Timeout time.Duration `yaml:"timeout" default:"5s"`
 }
 
@@ -30,9 +31,16 @@ func New(cfg Config, handler http.Handler) *Server {
 func (s *Server) Run(ctx context.Context) error {
 	go func() {
 		<-ctx.Done()
+
 		ctxShutdown, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
+
 		_ = s.srv.Shutdown(ctxShutdown)
 	}()
-	return s.srv.ListenAndServe()
+
+	err := s.srv.ListenAndServe()
+	if errors.Is(err, http.ErrServerClosed) {
+		return nil
+	}
+	return err
 }

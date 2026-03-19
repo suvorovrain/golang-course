@@ -1,0 +1,1 @@
+реализовать "collector" и "processor"

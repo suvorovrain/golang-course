@@ -9,7 +9,7 @@ import (
 )
 
 type Config struct {
-	Address    string        `yaml:"address" default:"8080"`
+	Address string        `yaml:"address" default:"8080"`
 	Timeout time.Duration `yaml:"timeout" default:"5s"`
 }
 type Server struct {

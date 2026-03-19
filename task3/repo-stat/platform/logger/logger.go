@@ -9,7 +9,7 @@ type Config struct {
 	LogLevel string `yaml:"log_level" default:"DEBUG"`
 }
 
-func mustMakeLogger(logLevel string) *slog.Logger {
+func MustMakeLogger(logLevel string) *slog.Logger {
 	var level slog.Level
 	switch logLevel {
 	case "DEBUG":
