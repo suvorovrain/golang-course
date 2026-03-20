@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package proto.collector;
+
+option go_package = "github.com/Chaice1/golang-course/task2/proto/collector;collectorpb";
+
+service Collector{
+    rpc GetInfoRepo(GetInfoRepoRequest) returns (GetInfoRepoResponce);
+}
+
+message GetInfoRepoRequest{
+    string repo = 1;
+    string owner = 2;
+}
+
+message GetInfoRepoResponce{
+    string fullname = 1;
+    string description = 2;
+    uint64 stargazers = 3;
+    uint64 forks = 4;
+    string createdat = 5;
+}
