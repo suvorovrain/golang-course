@@ -1,3 +1,7 @@
+SHELL = /bin/sh
+
+.PHONY: lint protobuf protolint golint tools test
+
 lint: protolint golint
 
 protobuf:
@@ -21,5 +25,5 @@ tools:
 
 test:
 	go test -race -coverprofile cover.out \
-		$(shell go list ./... | egrep -v 'repo-stat/(proto)')
+		$(shell go list ./... | grep -E -v 'repo-stat/(proto)')
 	go tool cover -html cover.out -o cover.html
