@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"context"
-	"task3/api/internal/domain"
+	"repo-stat/api/internal/domain"
 )
 
 type SubscriberPinger interface {

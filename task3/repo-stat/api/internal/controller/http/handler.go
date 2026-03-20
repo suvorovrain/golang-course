@@ -4,9 +4,9 @@ import (
 	"context"
 	"log/slog"
 	"net/http"
-	"task3/api/config"
-	"task3/api/internal/adapter/subscriber"
-	"task3/api/internal/usecase"
+	"repo-stat/api/config"
+	"repo-stat/api/internal/adapter/subscriber"
+	"repo-stat/api/internal/usecase"
 )
 
 func NewHandler(ctx context.Context, log *slog.Logger, cfg config.Config) (http.Handler, error) {

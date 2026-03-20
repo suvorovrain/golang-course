@@ -1,9 +1,9 @@
 package config
 
 import (
-	"task3/platform/env"
-	`task3/platform/grpcserver`
-	"task3/platform/logger"
+	"repo-stat/platform/env"
+	"repo-stat/platform/grpcserver"
+	"repo-stat/platform/logger"
 )
 
 type App struct {
@@ -11,13 +11,13 @@ type App struct {
 }
 
 type Services struct {
-	API string `yaml:"subscriber"`
+	API string `yaml:"api"`
 }
 
 type Config struct {
 	App      App
 	Services Services
-	HTTP     grpcserver.Config
+	GRPC     grpcserver.Config
 	Logger   logger.Config
 }
 

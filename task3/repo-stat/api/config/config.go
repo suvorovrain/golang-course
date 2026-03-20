@@ -1,9 +1,9 @@
 package config
 
 import (
-	"task3/platform/env"
-	"task3/platform/httpserver"
-	"task3/platform/logger"
+	"repo-stat/platform/env"
+	"repo-stat/platform/httpserver"
+	"repo-stat/platform/logger"
 )
 
 type App struct {

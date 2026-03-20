@@ -1,4 +1,4 @@
-package app
+package main
 
 import (
 	"context"
@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"task3/api/config"
-	"task3/api/internal/controller/http"
-	"task3/platform/httpserver"
-	"task3/platform/logger"
+	"repo-stat/api/config"
+	"repo-stat/api/internal/controller/http"
+	"repo-stat/platform/httpserver"
+	"repo-stat/platform/logger"
 )
 
 func run(ctx context.Context) error {

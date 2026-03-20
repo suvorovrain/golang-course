@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"log/slog"
 	"net/http"
-	"task3/api/internal/dto"
-	"task3/api/internal/usecase"
+	"repo-stat/api/internal/dto"
+	"repo-stat/api/internal/usecase"
 )
 
 func NewPingHandler(log *slog.Logger, ping *usecase.Ping) http.HandlerFunc {

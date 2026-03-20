@@ -3,11 +3,12 @@ package subscriber
 import (
 	"context"
 	"log/slog"
-	"task3/api/internal/domain"
+	"repo-stat/api/internal/domain"
+
+	subscirberpb "repo-stat/proto/subscriber"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	subscirberpb "task3/proto/subscriber"
 )
 
 type Client struct {

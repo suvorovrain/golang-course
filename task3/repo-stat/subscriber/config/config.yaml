@@ -1,8 +1,8 @@
 app:
   app_name: "repo-stat-subscriber"
 
-http:
-  port: "8081"
+grpc:
+  address: ":8080"
   timeout: "5s"
 
 logger:
