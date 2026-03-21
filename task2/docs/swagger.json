@@ -1,0 +1,103 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API Gateway for GitHub Repository Information.",
+        "title": "GitHub Collector API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/get_repo_info/{owner}/{repo}": {
+            "get": {
+                "description": "Returns information about a  GitHub repository with the help of Collector",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Gateway"
+                ],
+                "summary": "Get Repository Info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "GitHub Owner Name",
+                        "name": "owner",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Repository Name",
+                        "name": "repo",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Chaice1_golang-course_task2_internal_apigateway_adapters_model.SuccessResponce"
+                        }
+                    },
+                    "400": {
+                        "description": "BAD_REQUEST",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT_FOUND",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "INTERNAL_ERROR",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "github_com_Chaice1_golang-course_task2_internal_apigateway_adapters_model.GetRepoInfoResp": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "descritpion": {
+                    "type": "string"
+                },
+                "forks": {
+                    "type": "integer"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "stargazers": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_Chaice1_golang-course_task2_internal_apigateway_adapters_model.SuccessResponce": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "repo_info": {
+                    "$ref": "#/definitions/github_com_Chaice1_golang-course_task2_internal_apigateway_adapters_model.GetRepoInfoResp"
+                }
+            }
+        }
+    }
+}

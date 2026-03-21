@@ -66,3 +66,31 @@
 - [Чистая архитектура в Go (статья)](https://pavel-v-p.medium.com/clean-architecture-in-go-2708304217f2)
 - [Документация gRPC для Go](https://grpc.io/docs/languages/go/basics/)
 - [Библиотека Swag для генерации Swagger](https://github.com/swaggo/swag)
+
+## Инструкция по запуску
+## Запуск с помощью Docker
+1.  **Клонируйте репозиторий:**
+    ```bash
+    git clone https://github.com/Chaice1/golang-course
+    ```
+
+2.  **Перейдите в директорию проекта:**
+    ```bash
+    cd golang-course
+    ```
+3. **Перейдите в папку task2:**
+    ```bash
+    cd task2
+    ```
+4.  **Сборка и запуск программы:**
+    ```bash
+    make build
+    ```
+5.  **Просто запуск программы:**
+    ```bash
+    make run
+    ```
+6.  **Остановка работы программы:**
+    ```
+    make stop
+    ```
