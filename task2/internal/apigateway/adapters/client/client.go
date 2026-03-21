@@ -2,6 +2,7 @@ package apigatewayclient
 
 import (
 	"context"
+	"log"
 
 	collectorpb "github.com/Chaice1/golang-course/task2/gen"
 	apigatewaydomain "github.com/Chaice1/golang-course/task2/internal/apigateway/domain"
@@ -24,25 +25,27 @@ func (cc *collectorClient) GetRepoInfo(ctx context.Context, owner string, repo s
 		Repo:  repo,
 	})
 
-	status, ok := status.FromError(err)
-	if !ok {
-		return nil, apigatewaydomain.InternalError
+	log.Println(repoinfo, err)
+	if err == nil {
+		return &apigatewaydomain.RepoInfo{
+			FullName:    repoinfo.GetFullname(),
+			Description: repoinfo.GetDescription(),
+			Stargazers:  repoinfo.GetStargazers(),
+			Forks:       repoinfo.GetForks(),
+			CreatedAt:   repoinfo.GetCreatedat(),
+		}, nil
 	}
 
+	status, _ := status.FromError(err)
+
+	err = apigatewaydomain.InternalError
 	switch status.Code() {
 	case codes.InvalidArgument:
-		return nil, apigatewaydomain.BadRequest
+		err = apigatewaydomain.BadRequest
 	case codes.NotFound:
-		return nil, apigatewaydomain.NotFound
-	case codes.Internal:
-		return nil, apigatewaydomain.InternalError
+		err = apigatewaydomain.NotFound
 	}
 
-	return &apigatewaydomain.RepoInfo{
-		FullName:    repoinfo.Fullname,
-		Description: repoinfo.Description,
-		Stargazers:  repoinfo.Stargazers,
-		Forks:       repoinfo.Forks,
-		CreatedAt:   repoinfo.Createdat,
-	}, nil
+	return nil, err
+
 }
