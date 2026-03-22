@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package proto;
+
+// Путь ДОЛЖЕН начинаться с имени модуля из go.mod
+option go_package = "task2/proto;proto";
+
+service RepositoryService {
+    rpc GetRepository(GetRepoRequest) returns (RepoResponse);
+}
+
+message GetRepoRequest {
+    string owner = 1;
+    string repo = 2;
+}
+
+message RepoResponse {
+    string name = 1;
+    string description = 2;
+    int32 stars = 3;
+    int32 forks = 4;
+    string created_at = 5;
+}

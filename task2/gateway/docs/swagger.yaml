@@ -1,0 +1,57 @@
+basePath: /
+definitions:
+  domain.Repository:
+    properties:
+      created_at:
+        example: "2013-05-24T16:22:20Z"
+        type: string
+      description:
+        example: Go library for accessing the GitHub API
+        type: string
+      forks:
+        example: 2345
+        type: integer
+      name:
+        example: go-github
+        type: string
+      stars:
+        example: 12345
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a server for getting information about github repository
+  title: My GitHub Repository API
+  version: "1.0"
+paths:
+  /api/repo/{owner}/{repo}:
+    get:
+      parameters:
+      - description: Имя владельца
+        in: path
+        name: owner
+        required: true
+        type: string
+      - description: Название репозитория
+        in: path
+        name: repo
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Repository'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Получить информацию о репозитории
+      tags:
+      - repositories
+swagger: "2.0"

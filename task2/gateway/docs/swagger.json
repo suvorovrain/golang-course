@@ -1,0 +1,84 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a server for getting information about github repository",
+        "title": "My GitHub Repository API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/api/repo/{owner}/{repo}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "repositories"
+                ],
+                "summary": "Получить информацию о репозитории",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Имя владельца",
+                        "name": "owner",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Название репозитория",
+                        "name": "repo",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Repository"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "domain.Repository": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "example": "2013-05-24T16:22:20Z"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Go library for accessing the GitHub API"
+                },
+                "forks": {
+                    "type": "integer",
+                    "example": 2345
+                },
+                "name": {
+                    "type": "string",
+                    "example": "go-github"
+                },
+                "stars": {
+                    "type": "integer",
+                    "example": 12345
+                }
+            }
+        }
+    }
+}
