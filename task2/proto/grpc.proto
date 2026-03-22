@@ -1,0 +1,20 @@
+syntax = "proto3";
+package collector;
+option go_package = "./gen";
+
+service GRPCService {
+    rpc GetRepoInfo(GetRepoInfoRequest) returns (GetRepoInfoResponse);
+}
+
+message GetRepoInfoRequest {
+    string Owner = 1;
+    string RepoName = 2;
+}
+
+message GetRepoInfoResponse {
+    string Name = 1;
+    string Description = 2;
+    int64 StarsCount = 3;
+    int64 ForksCount = 4;
+    string CreatedAt = 5;
+}

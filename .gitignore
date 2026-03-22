@@ -1,0 +1,3 @@
+.vscode/
+task2/.cache
+docker-compose.override.yml

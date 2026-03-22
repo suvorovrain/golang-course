@@ -1,0 +1,108 @@
+basePath: /
+definitions:
+  domain.RepoInfo:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      forks_count:
+        type: integer
+      name:
+        type: string
+      stargazers_count:
+        type: integer
+    type: object
+host: localhost:8081
+info:
+  contact: {}
+  description: REST gateway for retrieving GitHub repository information.
+  title: Gateway API
+  version: "1.0"
+paths:
+  /gh-tool/{owner}/{repoName}:
+    get:
+      description: Get GitHub-repository info by owner + repoName
+      parameters:
+      - description: 'Repository owner (for example: Desbordante)'
+        in: path
+        name: owner
+        required: true
+        type: string
+      - description: 'Repository name (for example: desbordante-core)'
+        in: path
+        name: repoName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.RepoInfo'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "429":
+          description: Too Many Requests
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get GitHub-repository info by owner + repoName
+      tags:
+      - repo-info
+  /gh-tool/by-url:
+    get:
+      description: Get GitHub-repository info by URL
+      parameters:
+      - description: GitHub repository URL
+        in: query
+        name: url
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.RepoInfo'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "429":
+          description: Too Many Requests
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get GitHub-repository info by URL
+      tags:
+      - repo-info
+swagger: "2.0"

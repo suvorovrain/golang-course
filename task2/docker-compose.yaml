@@ -1,0 +1,19 @@
+services:
+  collector:
+    build:
+      context: .
+      dockerfile: collector/Dockerfile
+    ports:
+      - "50051:50051"
+
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile
+    ports:
+      - "8080:8081"
+    environment:
+      - COLLECTOR_ADDR=collector:50051
+      - SWAGGER_HOST=localhost:8080
+    depends_on:
+      - collector
