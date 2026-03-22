@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package collector;
+
+option go_package = "сollector/api/pb";
+
+service CollectorService {
+  // Получить информацию по полной ссылке на репозиторий
+  rpc GetRepositoryByURL(GetRepositoryByURLRequest) returns (GetRepositoryResponse);
+}
+
+// Запрос: получить репозиторий по полной URL-ссылке
+// Пример: "https://github.com/torvalds/linux"
+message GetRepositoryByURLRequest {
+  string url = 1;
+}
+
+// Ответ: содержит данные репозитория или ошибку
+message GetRepositoryResponse {
+  Repository repository = 1;
+
+  // Код ошибки (если произошла ошибка)
+  // 0 = нет ошибки, >0 = код ошибки (см. ErrorCodes)
+  int32 error_code = 2;
+
+  string error_message = 3;
+}
+
+// Сущность репозитория (соответствует Repository из ДЗ №1)
+message Repository {
+  string full_name = 1;
+  int32 stars = 2;
+  string description = 3;
+  int64 forks = 4;
+  string created_at = 5;
+  string language = 6;
+}
+
+// Эти коды маппятся в gRPC status codes в handler слое
+enum ErrorCode {
+  ERROR_CODE_UNSPECIFIED = 0;  // Нет ошибки
+
+  // Клиентские ошибки (4xx)
+  ERROR_CODE_NOT_FOUND = 404;           // Репозиторий не найден
+  ERROR_CODE_UNAUTHORIZED = 401;        // Требуется авторизация
+  ERROR_CODE_FORBIDDEN = 403;           // Доступ запрещён
+  ERROR_CODE_RATE_LIMITED = 429;        // Превышен лимит запросов
+  ERROR_CODE_INVALID_INPUT = 400;       // Некорректные входные данные
+
+  // Серверные ошибки (5xx)
+  ERROR_CODE_INTERNAL = 500;            // Внутренняя ошибка сервера
+  ERROR_CODE_UPSTREAM_ERROR = 502;      // Ошибка при вызове GitHub API
+}
