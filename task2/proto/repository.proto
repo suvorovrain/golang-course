@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option go_package = "./pkg/api;api";
+
+package api;
+
+service RepositoryService {
+  rpc GetRepo (GetRepoRequest) returns (GetRepoResponse);
+}
+
+message GetRepoRequest {
+  string owner = 1;
+  string name = 2;
+}
+
+message GetRepoResponse {
+  string name = 1;
+  string description = 2;
+  int64 stars = 3;
+  int64 forks = 4;
+  string created_at = 5;
+}
