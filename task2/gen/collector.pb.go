@@ -166,8 +166,8 @@ const file_collector_proto_rawDesc = "" +
 	"\x05forks\x18\x04 \x01(\x04R\x05forks\x12\x1c\n" +
 	"\tcreatedat\x18\x05 \x01(\tR\tcreatedat2e\n" +
 	"\tCollector\x12X\n" +
-	"\vGetInfoRepo\x12#.proto.collector.GetInfoRepoRequest\x1a$.proto.collector.GetInfoRepoResponceB\xc6\x01\n" +
-	"\x13com.proto.collectorB\x0eCollectorProtoP\x01ZBgithub.com/Chaice1/golang-course/task2/proto/collector;collectorpb\xa2\x02\x03PCX\xaa\x02\x0fProto.Collector\xca\x02\x0fProto\\Collector\xe2\x02\x1bProto\\Collector\\GPBMetadata\xea\x02\x10Proto::Collectorb\x06proto3"
+	"\vGetInfoRepo\x12#.proto.collector.GetInfoRepoRequest\x1a$.proto.collector.GetInfoRepoResponceB\xa0\x01\n" +
+	"\x13com.proto.collectorB\x0eCollectorProtoP\x01Z\x1c/proto/collector;collectorpb\xa2\x02\x03PCX\xaa\x02\x0fProto.Collector\xca\x02\x0fProto\\Collector\xe2\x02\x1bProto\\Collector\\GPBMetadata\xea\x02\x10Proto::Collectorb\x06proto3"
 
 var (
 	file_collector_proto_rawDescOnce sync.Once
