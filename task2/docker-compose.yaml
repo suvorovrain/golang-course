@@ -1,19 +1,16 @@
-
-
-
 services:
 
   collector:
     build:
       context: .
-      dockerfile: ./cmd/collector/Dockerfile
+      dockerfile: ./collector/cmd/Dockerfile
     ports:
       - "8082:8082"
   
   apigateway:
     build:
       context: .
-      dockerfile: ./cmd/apigateway/Dockerfile
+      dockerfile: ./apigateway/cmd/Dockerfile
     ports:
       - "8080:8080"
     depends_on:
