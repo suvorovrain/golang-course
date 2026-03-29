@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package proto.collector;
 
-option go_package = "github.com/Chaice1/golang-course/task2/proto/collector;collectorpb";
+option go_package = "/proto/collector;collectorpb";
 
 service Collector{
     rpc GetInfoRepo(GetInfoRepoRequest) returns (GetInfoRepoResponce);
