@@ -1,0 +1,41 @@
+services:
+  api:
+    image: api:latest
+    build:
+      context: repo-stat
+      dockerfile: Dockerfile.api
+    container_name: api
+    restart: unless-stopped
+    ports:
+      - 28080:8080
+    volumes:
+      - ./repo-stat/api/config/config.yaml:/config.yaml
+    environment:
+      - LISTEN_ADDRESS=:8080
+      - SUBSCRIBER_ADDRESS=subscriber:8080
+    depends_on:
+      - subscriber
+
+  subscriber:
+    image: subscriber:latest
+    build:
+      context: repo-stat
+      dockerfile: Dockerfile.subscriber
+    container_name: subscriber
+    restart: unless-stopped
+    ports:
+      - 28081:8080
+    volumes:
+      - ./repo-stat/subscriber/config/config.yaml:/config.yaml
+    environment:
+      - LISTEN_ADDRESS=:8080
+      - API_ADDRESS=api:8080
+  tests:
+    image: tests:latest
+    build:
+      context: tests
+    container_name: tests
+    restart: "no"
+    depends_on:
+      - api
+    entrypoint: ["true"]
