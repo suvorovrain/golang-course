@@ -12,9 +12,14 @@ import (
 
 func NewHandler(ctx context.Context, log *slog.Logger, cfg config.Config) (http.Handler, error) {
 	subscriberClient, err := subscriber.NewClient(cfg.Services.Subscriber, log)
-	processorClient, err := processor.NewClient(cfg.Services.Processor, log)
 	if err != nil {
 		log.Error("cannot init subscriber adapter", "error", err)
+		return nil, err
+	}
+
+	processorClient, err := processor.NewClient(cfg.Services.Processor, log)
+	if err != nil {
+		log.Error("cannot init processor adapter", "error", err)
 		return nil, err
 	}
 

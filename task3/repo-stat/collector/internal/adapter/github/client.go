@@ -17,7 +17,6 @@ import (
 type Client struct {
 	httpClient *http.Client
 	token      string
-	baseURL    string
 }
 
 func NewClient(token string) *Client {

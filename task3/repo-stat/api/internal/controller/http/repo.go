@@ -31,7 +31,7 @@ func NewRepoHandler(log *slog.Logger, repo *usecase.RepoUseCase) http.HandlerFun
 		if urlParam == "" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode(map[string]string{
+			_ = json.NewEncoder(w).Encode(map[string]string{
 				"error": "url is required",
 			})
 			return
@@ -41,7 +41,7 @@ func NewRepoHandler(log *slog.Logger, repo *usecase.RepoUseCase) http.HandlerFun
 		if err != nil {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode(map[string]string{
+			_ = json.NewEncoder(w).Encode(map[string]string{
 				"error": "url parse error",
 			})
 			return
@@ -51,7 +51,7 @@ func NewRepoHandler(log *slog.Logger, repo *usecase.RepoUseCase) http.HandlerFun
 		if fullName == "" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode(map[string]string{
+			_ = json.NewEncoder(w).Encode(map[string]string{
 				"error": "full name is required",
 			})
 			return
@@ -82,7 +82,7 @@ func NewRepoHandler(log *slog.Logger, repo *usecase.RepoUseCase) http.HandlerFun
 			log.Error("get repo info failed", "error", err, "url", urlParam)
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(statusCode)
-			json.NewEncoder(w).Encode(map[string]string{
+			_ = json.NewEncoder(w).Encode(map[string]string{
 				"error": errorMsg,
 			})
 

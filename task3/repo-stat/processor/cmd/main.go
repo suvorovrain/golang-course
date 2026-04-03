@@ -33,10 +33,14 @@ func run(ctx context.Context) error {
 
 	collectorClient, err := collector.NewClient(cfg.Services.Collector, log)
 	if err != nil {
-		log.Error("error creating collector client", err)
+		log.Error("error creating collector client", "error", err)
 		return err
 	}
-	defer collectorClient.Close()
+	defer func() {
+		if err := collectorClient.Close(); err != nil {
+			log.Error("error closing collector client", "error", err)
+		}
+	}()
 
 	pingUseCase := usecase.NewPing()
 	repoUseCase := usecase.NewRepo(collectorClient)
@@ -45,7 +49,7 @@ func run(ctx context.Context) error {
 
 	lis, err := net.Listen("tcp", cfg.GRPC.Address)
 	if err != nil {
-		log.Error("error creating gRPC listener", err)
+		log.Error("error creating gRPC listener", "error", err)
 		return err
 	}
 

@@ -10,7 +10,8 @@ service ProcessorService {
   rpc GetRepo (GetRepoRequest) returns (GetRepoResponse);
 }
 
-message PingRequest {}
+message PingRequest {
+}
 
 message PingResponse {
   string reply = 1;
