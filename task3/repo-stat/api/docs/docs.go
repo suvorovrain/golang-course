@@ -31,13 +31,13 @@ const docTemplate = `{
                     "200": {
                         "description": "All services are available",
                         "schema": {
-                            "$ref": "#/definitions/repo-stat_api_internal_dto.PingResponse"
+                            "$ref": "#/definitions/dto.PingResponse"
                         }
                     },
                     "503": {
                         "description": "One or all services are not available",
                         "schema": {
-                            "$ref": "#/definitions/repo-stat_api_internal_dto.PingResponse"
+                            "$ref": "#/definitions/dto.PingResponse"
                         }
                     }
                 }
@@ -68,7 +68,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Success",
                         "schema": {
-                            "$ref": "#/definitions/repo-stat_api_internal_dto.RepoResponse"
+                            "$ref": "#/definitions/dto.RepoResponse"
                         }
                     },
                     "400": {
@@ -100,13 +100,13 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "repo-stat_api_internal_dto.PingResponse": {
+        "dto.PingResponse": {
             "type": "object",
             "properties": {
                 "services": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/repo-stat_api_internal_dto.ServiceStatus"
+                        "$ref": "#/definitions/dto.ServiceStatus"
                     }
                 },
                 "status": {
@@ -114,7 +114,7 @@ const docTemplate = `{
                 }
             }
         },
-        "repo-stat_api_internal_dto.RepoResponse": {
+        "dto.RepoResponse": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -126,6 +126,9 @@ const docTemplate = `{
                 "forks": {
                     "type": "integer"
                 },
+                "full_name": {
+                    "type": "string"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -134,7 +137,7 @@ const docTemplate = `{
                 }
             }
         },
-        "repo-stat_api_internal_dto.ServiceStatus": {
+        "dto.ServiceStatus": {
             "type": "object",
             "properties": {
                 "name": {
@@ -151,7 +154,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0.0",
-	Host:             "localhost:8080",
+	Host:             "localhost:28080",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Repo-stat API Gateway",

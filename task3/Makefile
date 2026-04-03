@@ -14,7 +14,7 @@ down-volumes: check-container-runtime ## Stop and remove containers and all volu
 	$(CONTAINER_RUNTIME) compose down -v
 
 run-tests: ## Run tests container
-	$(CONTAINER_RUNTIME) run --rm --network task3_repo-stat tests:latest
+	cd tests && go test -v -timeout 300s ./...
 
 test: check-container-runtime ## Up containers and run tests
 	@$(MAKE) down-volumes

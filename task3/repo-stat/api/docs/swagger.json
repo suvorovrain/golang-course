@@ -6,7 +6,7 @@
         "contact": {},
         "version": "1.0.0"
     },
-    "host": "localhost:8080",
+    "host": "localhost:28080",
     "basePath": "/",
     "paths": {
         "/api/ping": {
@@ -25,13 +25,13 @@
                     "200": {
                         "description": "All services are available",
                         "schema": {
-                            "$ref": "#/definitions/repo-stat_api_internal_dto.PingResponse"
+                            "$ref": "#/definitions/dto.PingResponse"
                         }
                     },
                     "503": {
                         "description": "One or all services are not available",
                         "schema": {
-                            "$ref": "#/definitions/repo-stat_api_internal_dto.PingResponse"
+                            "$ref": "#/definitions/dto.PingResponse"
                         }
                     }
                 }
@@ -62,7 +62,7 @@
                     "200": {
                         "description": "Success",
                         "schema": {
-                            "$ref": "#/definitions/repo-stat_api_internal_dto.RepoResponse"
+                            "$ref": "#/definitions/dto.RepoResponse"
                         }
                     },
                     "400": {
@@ -94,13 +94,13 @@
         }
     },
     "definitions": {
-        "repo-stat_api_internal_dto.PingResponse": {
+        "dto.PingResponse": {
             "type": "object",
             "properties": {
                 "services": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/repo-stat_api_internal_dto.ServiceStatus"
+                        "$ref": "#/definitions/dto.ServiceStatus"
                     }
                 },
                 "status": {
@@ -108,7 +108,7 @@
                 }
             }
         },
-        "repo-stat_api_internal_dto.RepoResponse": {
+        "dto.RepoResponse": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -120,6 +120,9 @@
                 "forks": {
                     "type": "integer"
                 },
+                "full_name": {
+                    "type": "string"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -128,7 +131,7 @@
                 }
             }
         },
-        "repo-stat_api_internal_dto.ServiceStatus": {
+        "dto.ServiceStatus": {
             "type": "object",
             "properties": {
                 "name": {

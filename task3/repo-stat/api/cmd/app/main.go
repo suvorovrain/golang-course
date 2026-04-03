@@ -47,7 +47,7 @@ func run(ctx context.Context) error {
 // @title Repo-stat API Gateway
 // @version 1.0.0
 // @description API for getting info about github repo by url
-// @host localhost:8080
+// @host localhost:28080
 // @BasePath /
 func main() {
 	ctx := context.Background()
