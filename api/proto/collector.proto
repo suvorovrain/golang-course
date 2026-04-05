@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package collector; //типо имя сервера коллектор
+
+option go_package = "github-info-system/api/generated;generated";
+//путь к папке, где будут лежат сгенерированные файлы
+//и название пакета
+
+service CollectorService{
+    rpc GetRepoInfo(RepoRequest) returns (RepoResponse);
+}
+//RPC — это вызов функции, которая выполняется на другом компьютере (или в другой программе), 
+//а результат возвращается обратно.
+
+message RepoRequest {
+    string owner = 1;
+    string repo = 2;
+}
+message RepoResponse {
+    string name = 1;
+    string full_name = 2;
+    string description = 3;
+    string url = 4;
+    int32 stars = 5;
+    int32 forks = 6;
+    int32 watchers = 7;
+    string language = 8;
+    string created_at = 9;
+    string updated_at = 10;
+    string error = 11;
+}

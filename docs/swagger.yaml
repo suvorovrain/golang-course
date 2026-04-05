@@ -1,0 +1,77 @@
+openapi: 3.0.0
+info:
+  title: GitHub Info Gateway API
+  description: API для получения информации о GitHub репозиториях
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Локальный сервер Gateway
+
+paths:
+  /health:
+    get:
+      summary: Проверка здоровья сервиса
+      description: Возвращает статус сервера
+      responses:
+        '200':
+          description: Сервер работает
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+
+  /api/v1/repos/{owner}/{repo}:
+    get:
+      summary: Получить информацию о репозитории
+      description: Возвращает данные о репозитории GitHub
+      parameters:
+        - name: owner
+          in: path
+          required: true
+          description: Владелец репозитория (например, golang)
+          schema:
+            type: string
+        - name: repo
+          in: path
+          required: true
+          description: Название репозитория (например, go)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  full_name:
+                    type: string
+                  description:
+                    type: string
+                  url:
+                    type: string
+                  stars:
+                    type: integer
+                  forks:
+                    type: integer
+                  watchers:
+                    type: integer
+                  language:
+                    type: string
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+        '400':
+          description: Неверный формат запроса
+        '404':
+          description: Репозиторий не найден
+        '500':
+          description: Внутренняя ошибка сервера
