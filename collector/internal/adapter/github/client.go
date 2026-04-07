@@ -8,19 +8,17 @@ import (
 )
 
 type GitHubClient struct {
-	client  *http.Client 
+	client  *http.Client
 	baseURL string
 }
 
 func NewGitHubClient() *GitHubClient {
-	
+
 	return &GitHubClient{
 		client: &http.Client{
 			Timeout: 10 * time.Second,
 		},
-		
-		
-		baseURL: "https:
+		baseURL: "https://api.github.com",
 	}
 }
 
@@ -37,15 +35,11 @@ type GitHubRepo struct {
 	UpdatedAt   string `json:"updated_at"`
 }
 
-
-
 func (c *GitHubClient) GetRepo(owner, repo string) (*GitHubRepo, error) {
 	url := fmt.Sprintf("%s/repos/%s/%s", c.baseURL, owner, repo)
-	
+
 	resp, err := c.client.Get(url)
-	
-	
-	
+
 	if err != nil {
 		return nil, fmt.Errorf("ошибка запроса: %w", err)
 	}
@@ -57,11 +51,7 @@ func (c *GitHubClient) GetRepo(owner, repo string) (*GitHubRepo, error) {
 	var ghRepo GitHubRepo
 	if err := json.NewDecoder(resp.Body).Decode(&ghRepo); err != nil {
 		return nil, fmt.Errorf("ошибка декодирования: %w", err)
-		
-		
-		
-		
-		
+
 	}
 	return &ghRepo, nil
 }
