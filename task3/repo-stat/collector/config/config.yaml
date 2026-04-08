@@ -1,0 +1,9 @@
+app:
+  app_name: "repo-stat-collector"
+
+grpc:
+  address: "localhost:8083"
+  timeout: "5s"
+
+logger:
+  log_level: "DEBUG"
