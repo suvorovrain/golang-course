@@ -1,0 +1,25 @@
+FROM golang:1.25-alpine AS build
+
+RUN apk add --no-cache git ca-certificates
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+
+RUN go mod download
+
+COPY . .
+
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /collector ./collector/cmd/app 
+
+
+
+
+FROM alpine:latest
+
+
+
+COPY --from=build /collector /collector_service
+
+ENTRYPOINT [ "/collector_service", "-config", "/config.yaml" ]
+
