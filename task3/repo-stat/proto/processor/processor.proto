@@ -1,0 +1,30 @@
+syntax="proto3";
+
+package processor.proto;
+
+option go_package = "repo-stat/proto/processor;processorpb";
+
+service Processor{
+    rpc GetInfoRepo(GetInfoRepoRequest) returns (GetInfoRepoResponce);
+    rpc Ping(PingRequest) returns (PingResponse);
+}
+
+message GetInfoRepoRequest{
+    string repo = 1;
+    string owner = 2;
+}
+
+message GetInfoRepoResponce{
+    string fullname = 1;
+    string description = 2;
+    uint64 stargazers = 3;
+    uint64 forks = 4;
+    string createdat = 5;
+}
+
+message PingRequest {
+}
+
+message PingResponse {
+  string reply = 1;
+}
