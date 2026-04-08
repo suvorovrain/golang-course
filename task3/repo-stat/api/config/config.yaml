@@ -10,3 +10,4 @@ logger:
 
 services:
   subscriber: "localhost:8081"
+  processor: "localhost:8082"
