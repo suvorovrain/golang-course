@@ -27,7 +27,7 @@ func (s *RepoServer) GetRepo(ctx context.Context, req *collector.GetRepoRequest)
 
 	repo, err := s.usecase.GetRepo(ctx, req.GetOwner(), req.GetName())
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	return &collector.GetRepoResponse{
