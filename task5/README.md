@@ -79,7 +79,7 @@ Collector остается сервисом, который инкапсулир
 
 Раз в **15 секунд** Collector должен:
 
-- вызывать Subscribe,
+- вызывать Subscribe по gRPC,
 - получать список всех подписок,
 - для каждой подписки отправлять задачу на обновление в Kafka.
 
@@ -96,6 +96,7 @@ Collector остается сервисом, который инкапсулир
     - **Controller/Handler**
     - **Adapter/Repository**
 - **Processor** должен использовать **PostgreSQL** для хранения информации о репозиториях.
+- Актуальное описание Swagger для api gateway 
 - Для работы с PostgreSQL использовать:
     - [**sqlc**](https://docs.sqlc.dev/en/latest/tutorials/getting-started-postgresql.html)
     - [**golang-migrate**](https://github.com/golang-migrate/migrate)
