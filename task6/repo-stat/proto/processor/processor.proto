@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package processor;
+option go_package = "repo-stat/proto/processor";
+
+service Processor {
+  rpc GetRepository(GetRepoRequest) returns (GetRepoResponse);
+  rpc GetSubscriptionsInfo(GetSubscriptionsInfoRequest) 
+    returns (GetSubscriptionsInfoResponse);
+  rpc Ping(PingRequest) returns (PingResponse);
+}
+
+message GetRepoResponse {
+  string owner = 1;
+  string repo = 2;
+  string full_name    = 3;
+  string description  = 4;
+  int32  stars        = 5;
+  int32  forks        = 6;
+  string created_at   = 7;
+  string visibility   = 8;
+}
+
+message GetRepoRequest {
+  string owner = 1;
+  string repo = 2;
+}
+
+message PingRequest {
+}
+
+message PingResponse {
+  string reply = 1;
+}
+
+message GetSubscriptionsInfoRequest {
+}
+
+message GetSubscriptionsInfoResponse {
+  repeated GetRepoResponse repositories = 1;
+}

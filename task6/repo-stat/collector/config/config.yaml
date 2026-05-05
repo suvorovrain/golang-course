@@ -1,0 +1,14 @@
+app:
+  app_name: "repo-stat-collector"
+
+grpc:
+  address: "localhost:8082"
+  timeout: "5s"
+
+logger:
+  log_level: "DEBUG"
+
+services:
+  subscriber: "localhost:8081"
+  processor:  "localhost:8083"
+  kafka: "localhost:9092"

@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package subscriber;
+
+option go_package = "repo-stat/proto/subscriber";
+
+service Subscriber {
+  rpc Ping(PingRequest) returns (PingResponse);
+
+  rpc ListSubscriptions(ListSubscriptionRequest)
+    returns (ListSubscriptionResponse);
+
+  rpc DeleteSubscription(DeleteSubscriptionRequest)
+    returns (DeleteSubscriptionResponse);
+
+  rpc PostSubscription(PostSubscriptionRequest)
+    returns (PostSubscriptionResponse);
+
+}
+
+message Subscription {
+  string owner = 1;
+  string repo = 2;
+}
+
+message PingRequest {
+}
+
+message PingResponse {
+  string reply = 1;
+}
+
+message PostSubscriptionRequest {
+  Subscription subscription = 1;
+}
+
+message PostSubscriptionResponse {
+}
+
+message DeleteSubscriptionRequest {
+  Subscription subscription = 1;
+}
+
+message DeleteSubscriptionResponse {
+}
+
+message ListSubscriptionRequest {
+}
+
+message ListSubscriptionResponse {
+  repeated Subscription subscriptions = 1;
+}

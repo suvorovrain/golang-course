@@ -1,0 +1,12 @@
+app:
+  app_name: "repo-stat-subscriber"
+
+grpc:
+  address: "localhost:8081"
+  timeout: "5s"
+
+logger:
+  log_level: "DEBUG"
+
+services:
+  api: "localhost:8080"

@@ -1,0 +1,19 @@
+FROM golang:1.25 AS build
+
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates
+
+COPY go.mod go.sum /src/
+COPY proto /src/proto
+COPY collector /src/collector
+COPY platform /src/platform
+
+ENV CGO_ENABLED=0
+RUN cd /src && go build -o /collector collector/cmd/main.go
+
+FROM scratch
+
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+
+COPY --from=build /collector /collector
+
+ENTRYPOINT ["/collector", "-config", "/config.yaml"]

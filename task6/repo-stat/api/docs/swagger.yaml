@@ -1,0 +1,250 @@
+basePath: /
+definitions:
+  dto.ListSubscriptionsResponse:
+    properties:
+      subscriptions:
+        items:
+          $ref: '#/definitions/dto.SubscriptionResponse'
+        type: array
+    type: object
+  dto.PingResponse:
+    properties:
+      services:
+        items:
+          $ref: '#/definitions/dto.ServiceStatus'
+        type: array
+      status:
+        type: string
+    type: object
+  dto.RepoResponse:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      forks:
+        type: integer
+      full_name:
+        type: string
+      stars:
+        type: integer
+      visibility:
+        type: string
+    type: object
+  dto.ServiceStatus:
+    properties:
+      name:
+        type: string
+      status:
+        type: string
+    type: object
+  dto.SubscriptionInfoResponse:
+    properties:
+      repositories:
+        items:
+          $ref: '#/definitions/dto.RepoResponse'
+        type: array
+    type: object
+  dto.SubscriptionResponse:
+    properties:
+      owner:
+        type: string
+      repo:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: API Gateway для получения информации о GitHub репозиториях
+  title: Repo Stat Gateway
+  version: "1.0"
+paths:
+  /api/ping:
+    get:
+      description: Отправляет ping-запросы в Processor и Subscriber и возвращает статус
+        каждого сервиса
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Все сервисы работают
+          schema:
+            $ref: '#/definitions/dto.PingResponse'
+        "503":
+          description: Один или несколько сервисов недоступны
+          schema:
+            $ref: '#/definitions/dto.PingResponse'
+      summary: Проверка здоровья сервисов
+      tags:
+      - Ping
+  /api/repositories/info:
+    get:
+      consumes:
+      - application/json
+      description: Принимает URL GitHub репозитория и возвращает его основные данные
+      parameters:
+      - description: 'URL репозитория (например: https://github.com/octocat/Hello-World)'
+        in: query
+        name: url
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.RepoResponse'
+        "400":
+          description: Некорректный URL или параметры
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Репозиторий не найден
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "429":
+          description: Превышен лимит запросов GitHub
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Получить информацию о репозитории по URL
+      tags:
+      - repositories
+  /subscriptions:
+    get:
+      description: Возвращает список всех репозиториев, на которые оформлены подписки
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ListSubscriptionsResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Получить список всех подписок
+      tags:
+      - subscriptions
+    post:
+      consumes:
+      - application/json
+      description: Подписывает пользователя на обновления репозитория GitHub
+      parameters:
+      - description: Данные подписки
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SubscriptionResponse'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Подписка успешно создана
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Некорректные данные (owner или repo пустые)
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Репозиторий не существует на GitHub
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Подписка уже существует
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Создать подписку на репозиторий
+      tags:
+      - subscriptions
+  /subscriptions/{owner}/{repo}:
+    delete:
+      description: Отписывает от репозитория
+      parameters:
+      - description: Владелец репозитория
+        in: path
+        name: owner
+        required: true
+        type: string
+      - description: Название репозитория
+        in: path
+        name: repo
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Подписка успешно удалена
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: owner или repo пустые
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Удалить подписку
+      tags:
+      - subscriptions
+  /subscriptions/info:
+    get:
+      description: Collector получает список подписок от Subscribe и собирает информацию
+        о каждом репозитории через GitHub API
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.SubscriptionInfoResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Получить информацию по всем подписанным репозиториям
+      tags:
+      - subscriptions
+schemes:
+- http
+swagger: "2.0"

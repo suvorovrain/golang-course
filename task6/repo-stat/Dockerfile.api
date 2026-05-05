@@ -1,0 +1,15 @@
+FROM golang:1.25 AS build
+
+COPY go.mod go.sum /src/
+COPY proto /src/proto
+COPY api /src/api
+COPY platform /src/platform
+
+ENV CGO_ENABLED=0
+RUN cd /src && go build -o /api api/cmd/app/main.go
+
+FROM scratch
+
+COPY --from=build /api /api
+
+ENTRYPOINT ["/api", "-config", "/config.yaml"]
