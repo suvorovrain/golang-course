@@ -1,0 +1,15 @@
+groups:
+  - name: demo_aggregations
+    interval: 10s
+    rules:
+      - record: demo:ping_requests:rate1m
+        expr: sum(rate(demo_ping_requests_total[1m]))
+
+      - record: demo:ping_errors:rate1m
+        expr: sum(rate(demo_ping_errors_total[1m]))
+
+      - record: demo:http_request_latency:p95
+        expr: histogram_quantile(0.95, sum by (le) (rate(demo_http_request_duration_seconds_bucket[5m])))
+
+      - record: demo:http_request_latency:avg
+        expr: sum(rate(demo_http_request_duration_seconds_sum[1m])) / sum(rate(demo_http_request_duration_seconds_count[1m]))
